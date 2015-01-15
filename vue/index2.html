@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="http://vuejs.org/js/vue.min.js"></script>
+        <style>
+            .Selected {
+                background-color: #a8d1ff;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <input type="text" v-model="searchText">
+            <hr>
+            <!-- usersのリストをseachTextでフィルターし、選択されたユーザーはSelectedクラスを適用する。 -->   
+            <div v-repeat="users | filterBy searchText in name" v-on="click: onClickUser(this)" v-class="Selected: this == selectedUser">
+                {{name}}
+            </div>
+            <hr>
+            <!-- 選択されたユーザーがいる場合は名前とコメントを表示 -->
+            <div v-show="selectedUser">
+                <div>名前: {{selectedUser.name}}</div>
+                <div>コメント: {{selectedUser.comment}}</div>
+            </div>
+        </div>
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    searchText: "",
+                    users: [],
+                    selectedUser: null
+                },
+                created: function(){
+                    // ユーザーデータを追加する
+                    this.users.push({name: "Takuya Tejima", comment: "次回の連載に乞うご期待。"});
+                    this.users.push({name: "Daisuke Shimizu", comment: "こんにちは。"});
+                    this.users.push({name: "Ryota Agata", comment: "Vue.js嫌い。"});
+                },
+                methods: {
+                    onClickUser: function(user){
+                        // クリックされたユーザーデータをselectedUserにセットする
+                        this.selectedUser = user;
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
